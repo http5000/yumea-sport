@@ -1,87 +1,81 @@
 # Yumea Move 🏃‍♀️
 
-Une **PWA de sport à la maison** : des séances courtes (5 à 30 min), sans matériel,
-générées selon ton objectif et ton niveau. Coach vocal en français, minuteur avec
-compte à rebours, suivi de ta série (streak). Inspiré de BetterMe / Grity / apps de
-calisthénie, dans l'esprit de la maquette « Elevate Your Body ».
+PWA de **sport à la maison** : séances courtes (5 à 30 min), sans matériel,
+générées selon objectif × niveau × durée. Minuteur avec compte à rebours,
+coach vocal, suivi de la série (streak). Esprit BetterMe / Grity / calisthénie.
 
-> **MVP fonctionnel** — installable, utilisable hors-ligne, zéro dépendance, zéro build.
+> **Stack alignée sur Tsuno** (Next.js 16 + React 19 + Tailwind v4, TypeScript),
+> mais en **export 100 % statique** → se déploie sans serveur ni base de données,
+> et s'intègre plus tard dans `hub-tsuno` avec un minimum de friction.
 
 ---
 
-## ✨ Ce qui marche déjà
+## ✨ Fonctionnel
 
-- **Générateur de programmes** : objectif (full body, fessiers, ventre, cardio, haut du
-  corps, mobilité) × niveau (débutant → avancé) × durée (5–30 min). Le moteur construit
-  échauffement → circuit (plusieurs tours) → retour au calme, en respectant la durée.
-- **Lecteur d'entraînement** : anneau de minuteur, compte à rebours « 3-2-1 »,
-  temps de travail/repos, exercice suivant annoncé, pause / précédent / suivant.
-- **Coach vocal français** : via l'API Web Speech du navigateur (gratuit, hors-ligne).
-  Option pour brancher une voix premium générée sur Higgsfield (voir plus bas).
-- **Bips de décompte** : Web Audio API (3 bips avant la fin de chaque intervalle).
-- **Suivi & motivation** : série de jours (streak), historique, minutes actives,
-  vue « cette semaine ». Tout est stocké en local (localStorage).
-- **PWA** : `manifest` + service worker → installable sur l'écran d'accueil,
-  fonctionne hors connexion.
-- **~35 exercices** au poids du corps, chacun avec un flag `impact` (option sans saut).
+- **Générateur de programmes** : full body / fessiers / ventre / cardio / haut du
+  corps / mobilité × débutant→avancé × 5–30 min. Échauffement → circuit (tours) →
+  retour au calme, calé sur la durée.
+- **Lecteur** : anneau de minuteur, décompte 3-2-1, travail/repos, exercice suivant
+  annoncé, pause / précédent / suivant, barre de progression.
+- **Coach vocal (anglais)** via Web Speech API (gratuit, hors-ligne) + **bips**
+  Web Audio. Langue centralisée dans `src/lib/coach.ts` (`VOICE_LANG`).
+- **Suivi** : série 🔥, historique, minutes, vue semaine — en `localStorage`
+  (aucun compte, aucune DB). `src/lib/store.ts` isole la persistance : au moment de
+  la fusion Tsuno, on remplace ces fonctions par Supabase sans toucher à l'UI.
+- **PWA** installable + offline (`public/manifest.webmanifest`, `public/sw.js`).
+- **~35 exercices** au poids du corps (flag `impact` = option sans saut).
+- **Vidéos d'exercices** : chaque exercice peut porter un champ `media` (URL vidéo).
+  Si vide → illustration animée (emoji). Un exemple réel est branché : `squats`
+  (vidéo générée sur Higgsfield, `public/exercises/squats.mp4`).
 
 ## 🗂️ Structure
 
 ```
-index.html              coquille de l'app
-manifest.webmanifest    métadonnées PWA
-sw.js                   service worker (offline-first)
-css/style.css           thème corail/crème, mobile-first
-js/data.js              base d'exercices + générateur de programmes
-js/player.js            lecteur (timer, voix, sons)
-js/app.js               routage, écrans, stockage local
-icons/                  icônes PWA
-assets/                 médias générés (vidéos d'exercices, voix)
+next.config.ts          output: "export" (statique)
+src/app/                layout, page (machine à états), globals.css (tokens + styles)
+src/components/          WorkoutPlayer.tsx (moteur timer/voix/sons)
+src/lib/                 data.ts (exos + générateur), store.ts (persistance), coach.ts (audio)
+public/                 manifest, sw.js, icons/, exercises/ (vidéos)
+prototype-vanilla/      1er prototype vanilla (archive, non utilisé)
 ```
 
-## ▶️ Lancer en local
-
-Aucun build. Il faut juste un serveur statique (pour les modules ES + le service worker) :
+## ▶️ Développer
 
 ```bash
-python3 -m http.server 8099
-# puis ouvrir http://localhost:8099
+npm install
+npm run dev            # http://localhost:3000
+npm run build          # génère out/ (statique)
+npx tsc --noEmit       # type-check (comme Tsuno, avant merge)
 ```
 
-Sur mobile : ouvrir l'URL, puis « Ajouter à l'écran d'accueil ».
+## 🚀 Déploiement (VPS + Caddy, statique)
+
+`npm run build` produit `out/`. Caddy le sert directement (HTTPS auto), sans Node :
+
+```
+move.yumea.fr {
+    root * /root/projets/yumea-sport/out
+    encode gzip
+    try_files {path} {path}.html /index.html
+    file_server
+}
+```
+
+Pré-requis : un enregistrement DNS `move.yumea.fr` → IP du VPS.
 
 ---
 
-## 🎬 Illustrations vidéo & voix (Higgsfield)
+## 🎬 Médias (Higgsfield)
 
-Chaque exercice peut afficher une **vidéo boucle**. Tant que le champ `media` d'un
-exercice est vide (`js/data.js`), le lecteur affiche une illustration animée (emoji).
-Dès qu'on renseigne une URL vidéo, elle s'affiche automatiquement à la place.
+- Vidéos d'exercices : `generate_video` (Kling, 9:16, boucle) → `public/exercises/`.
+- Voix humaine premium (anglais) à venir : embarquée dans la vidéo ou en piste audio.
+  Le français sera **doublé plus tard via un autre service** de voix.
+- Le VPS a un accès Internet ouvert → génération + téléchargement des rendus s'y font
+  directement.
 
-Pipeline de production des médias (via le serveur MCP Higgsfield) :
+## 🛣️ Suite
 
-1. **Vidéo d'exercice** — `generate_video` (Kling 3.0 Turbo, 9:16, 5 s) → boucle verticale.
-2. **Voix premium FR** — `generate_audio` (Seed Audio, voix française) → clips de coaching.
-3. Télécharger les rendus dans `assets/exercises/` et `assets/audio/`, puis renseigner
-   `media:` sur l'exercice concerné (le lecteur bascule alors emoji → vidéo tout seul).
-
-**Échantillons déjà générés (pipeline validé) :**
-
-- Vidéo squats 9:16 (Kling 3.0 Turbo) — job `8119a0cf-…`
-- Voix coach FR « Ines » (Seed Audio) — job `2c2c9cbb-…`
-
-> Note : dans cet environnement de dev, l'egress bloque le CDN Higgsfield (CloudFront),
-> donc les binaires ne sont pas versionnés ici. En prod / CI, l'étape de téléchargement
-> (`curl` des `rawUrl`) s'exécute là où le CDN est joignable, puis les fichiers vont
-> dans `assets/` et sont référencés via `media:`.
-
----
-
-## 🛣️ Feuille de route
-
-- [ ] Générer la bibliothèque vidéo complète (1 clip par exercice) + posters.
-- [ ] Voix premium FR pré-générée par exercice (fallback = Web Speech).
-- [ ] Personnalisation avancée (zones à éviter, matériel dispo, blessures).
+- [ ] Bibliothèque vidéo complète (1 clip par exercice) + posters.
+- [ ] Voix humaine anglaise par exercice.
 - [ ] Planning hebdo + rappels (notifications PWA).
-- [ ] Comptes / synchro cloud (aujourd'hui : 100 % local).
-- [ ] Intégration optionnelle dans l'outil interne (SSO employés).
+- [ ] Fusion dans `hub-tsuno` (retirer `output: export`, brancher Supabase, SSO employés).
