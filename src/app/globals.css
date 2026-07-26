@@ -18,13 +18,8 @@
   --radius: 22px;
   --shadow: 0 10px 30px rgba(48, 20, 46, .10);
   --safe-b: env(safe-area-inset-bottom, 0px);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cream: #171015; --card: #221a20; --ink: #f3ecf1;
-    --muted: #a99eaa; --plum-soft: #3a2336;
-    --shadow: 0 10px 30px rgba(0, 0, 0, .35);
-  }
+  /* Charte Yumea : fond clair (ivoire) partout, comme le site. Pas de dark mode. */
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
