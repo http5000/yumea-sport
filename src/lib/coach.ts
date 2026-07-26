@@ -66,6 +66,31 @@ export function say(text: string, opts: { rate?: number; pitch?: number } = {}) 
   } catch { /* ignore */ }
 }
 
+/* --- Pistes audio pré-générées (Higgsfield, anglais), DISSOCIÉES de la vidéo ---
+ * Une clé de phrase = un fichier public/audio/en/<clé>.wav. Si la clé est ici,
+ * on lit le fichier (voix humaine) ; sinon repli sur la synthèse navigateur.
+ * Pour le FR : ajouter public/audio/fr/<clé>.wav + basculer AUDIO_DIR. */
+const AUDIO_DIR = "/audio/en";
+export const AUDIO_CUES: Record<string, boolean> = {
+  halfway: true,
+  tenLeft: true,
+  finish: true,
+};
+let cueAudio: HTMLAudioElement | null = null;
+export function playCue(key: string, fallbackText: string) {
+  if (!voiceOn) return;
+  if (typeof window !== "undefined" && AUDIO_CUES[key]) {
+    try {
+      cueAudio?.pause();
+      cancelVoice();
+      cueAudio = new Audio(`${AUDIO_DIR}/${key}.wav`);
+      cueAudio.play().catch(() => say(fallbackText));
+      return;
+    } catch { /* repli */ }
+  }
+  say(fallbackText);
+}
+
 export function pauseVoice() { try { speechSynthesis?.pause(); } catch { /* */ } }
 export function resumeVoice() { try { speechSynthesis?.resume(); } catch { /* */ } }
 export function cancelVoice() { try { speechSynthesis?.cancel(); } catch { /* */ } }

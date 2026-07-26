@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useRef } from "react";
 import { EXERCISES, type Program } from "@/lib/data";
-import { beep, say, initVoice, pauseVoice, resumeVoice, cancelVoice } from "@/lib/coach";
+import { beep, say, playCue, initVoice, pauseVoice, resumeVoice, cancelVoice } from "@/lib/coach";
 import { COACH } from "@/lib/phrases";
 
 type Mode = "intro" | "work" | "rest" | "done";
@@ -51,7 +51,7 @@ export default function WorkoutPlayer({
 
   const finish = useRef<() => void>(() => {
     eng.current.mode = "done";
-    say(COACH.lines.finish());
+    playCue("finish", COACH.lines.finish());
     beep(880, 0.15);
     window.setTimeout(() => beep(1174, 0.3), 160);
     force();
@@ -85,8 +85,8 @@ export default function WorkoutPlayer({
         // Repères vocaux (clés traduisibles) : mi-parcours puis 10 s restantes.
         const w = blocks[e.index].work;
         if (blocks[e.index].phase !== "cooldown") {
-          if (w >= 18 && e.remaining === Math.round(w / 2)) say(COACH.lines.halfway());
-          else if (w >= 22 && e.remaining === 10) say(COACH.lines.tenLeft());
+          if (w >= 18 && e.remaining === Math.round(w / 2)) playCue("halfway", COACH.lines.halfway());
+          else if (w >= 22 && e.remaining === 10) playCue("tenLeft", COACH.lines.tenLeft());
         }
       }
       if (e.remaining <= 3 && e.remaining > 0) beep(e.mode === "work" ? 700 : 520);
