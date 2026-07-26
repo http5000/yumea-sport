@@ -43,8 +43,8 @@ export const EXERCISES: Record<string, Exercise> = {
   pont_fessier:       { name: "Pont fessier",          voice: "Glute bridge",     cat: "lower", impact: "low", emoji: "🌉", cue: "Pousse dans les talons, serre les fessiers en haut, sans cambrer le bas du dos." },
   donkey_kicks:       { name: "Donkey kicks",          voice: "Donkey kicks",     cat: "lower", impact: "low", emoji: "🦵", cue: "À quatre pattes, pousse le talon vers le plafond." },
   fire_hydrant:       { name: "Fire hydrants",         voice: "Fire hydrants",    cat: "lower", impact: "low", emoji: "🐕", cue: "À quatre pattes, ouvre la hanche sur le côté." },
-  chaise_mur:         { name: "Chaise contre le mur",  voice: "Wall sit",         cat: "lower", impact: "low", emoji: "🧱", cue: "Dos au mur, cuisses parallèles au sol, tiens." },
-  releve_mollets:     { name: "Relevés de mollets",    voice: "Calf raises",      cat: "lower", impact: "low", emoji: "🦶", cue: "Monte sur la pointe des pieds, contrôle la descente." },
+  chaise_mur:         { name: "Chaise contre le mur",  voice: "Wall sit",         cat: "lower", impact: "low", emoji: "🧱", cue: "Dos au mur, cuisses parallèles au sol, tiens.", media: "/exercises/chaise_mur.mp4" },
+  releve_mollets:     { name: "Relevés de mollets",    voice: "Calf raises",      cat: "lower", impact: "low", emoji: "🦶", cue: "Monte sur la pointe des pieds, contrôle la descente.", media: "/exercises/releve_mollets.mp4" },
 
   // --- Haut du corps ---
   pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé et aligné, coudes à 45°, regard vers le sol." },
