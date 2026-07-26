@@ -3,7 +3,10 @@
  * (VOICE_LANG). Le jour où on veut une vraie voix humaine, on remplace `say`
  * par la lecture d'un fichier audio pré-généré, sans changer les appels. */
 
-export const VOICE_LANG = "en-US";
+import { COACH } from "./phrases";
+
+/** Langue de synthèse = celle du pack de répliques actif (voir phrases.ts). */
+export const VOICE_LANG = COACH.lang;
 
 let audioCtx: AudioContext | null = null;
 function ac(): AudioContext | null {
