@@ -25,7 +25,7 @@ export const EXERCISES: Record<string, Exercise> = {
   marche_sur_place:   { name: "Marche sur place",      voice: "March in place",   cat: "warmup", impact: "low", emoji: "🚶", cue: "Monte les genoux, balance les bras." },
   cercles_bras:       { name: "Cercles de bras",       voice: "Arm circles",      cat: "warmup", impact: "low", emoji: "🌀", cue: "Grands cercles lents, épaules relâchées." },
   rotation_hanches:   { name: "Rotations des hanches", voice: "Hip circles",      cat: "warmup", impact: "low", emoji: "🔄", cue: "Mains sur les hanches, dessine de grands cercles." },
-  fentes_marchees:    { name: "Fentes marchées",       voice: "Walking lunges",   cat: "warmup", impact: "low", emoji: "🚶‍♀️", cue: "Grand pas, genou arrière vers le sol." },
+  fentes_marchees:    { name: "Fentes marchées",       voice: "Walking lunges",   cat: "warmup", impact: "low", emoji: "🚶‍♀️", cue: "Grand pas, genou avant aligné avec la cheville, buste droit." },
   chat_vache:         { name: "Chat / Vache",          voice: "Cat cow",          cat: "warmup", impact: "low", emoji: "🐱", cue: "À quatre pattes, arrondis puis creuse le dos." },
 
   // --- Cardio ---
@@ -34,32 +34,32 @@ export const EXERCISES: Record<string, Exercise> = {
   jumping_jacks:      { name: "Jumping jacks",         voice: "Jumping jacks",    cat: "cardio", impact: "high", emoji: "⭐", cue: "Bras et jambes s'ouvrent en même temps." },
   pas_chasses:        { name: "Pas chassés",           voice: "Side steps",       cat: "cardio", impact: "low",  emoji: "↔️", cue: "Reste bas, déplace-toi latéralement." },
   shadow_boxing:      { name: "Shadow boxing",         voice: "Shadow boxing",    cat: "cardio", impact: "low",  emoji: "🥊", cue: "Directs et crochets, gaine le ventre." },
-  mountain_climbers:  { name: "Mountain climbers",     voice: "Mountain climbers",cat: "cardio", impact: "low",  emoji: "⛰️", cue: "En planche, ramène les genoux vers la poitrine." },
+  mountain_climbers:  { name: "Mountain climbers",     voice: "Mountain climbers",cat: "cardio", impact: "low",  emoji: "⛰️", cue: "En planche gainée, hanches basses, ramène les genoux sans monter les fessiers." },
 
   // --- Bas du corps ---
-  squats:             { name: "Squats",                voice: "Squats",           cat: "lower", impact: "low", emoji: "🪑", cue: "Assieds-toi en arrière, poids sur les talons.", media: "/exercises/squats.mp4" },
-  squat_sumo:         { name: "Squat sumo",            voice: "Sumo squats",      cat: "lower", impact: "low", emoji: "🤸", cue: "Pieds larges, pointes vers l'extérieur." },
-  fentes_statiques:   { name: "Fentes statiques",      voice: "Static lunges",    cat: "lower", impact: "low", emoji: "🦿", cue: "Descends droit, genou arrière vers le sol." },
-  pont_fessier:       { name: "Pont fessier",          voice: "Glute bridge",     cat: "lower", impact: "low", emoji: "🌉", cue: "Pousse dans les talons, serre les fessiers en haut." },
+  squats:             { name: "Squats",                voice: "Squats",           cat: "lower", impact: "low", emoji: "🪑", cue: "Poids sur les talons, genoux alignés avec la pointe des pieds, dos droit.", media: "/exercises/squats.mp4" },
+  squat_sumo:         { name: "Squat sumo",            voice: "Sumo squats",      cat: "lower", impact: "low", emoji: "🤸", cue: "Pieds larges, pointes vers l'extérieur, genoux dans l'axe des orteils, buste droit." },
+  fentes_statiques:   { name: "Fentes statiques",      voice: "Static lunges",    cat: "lower", impact: "low", emoji: "🦿", cue: "Descends droit, genou avant au-dessus de la cheville, dos droit." },
+  pont_fessier:       { name: "Pont fessier",          voice: "Glute bridge",     cat: "lower", impact: "low", emoji: "🌉", cue: "Pousse dans les talons, serre les fessiers en haut, sans cambrer le bas du dos." },
   donkey_kicks:       { name: "Donkey kicks",          voice: "Donkey kicks",     cat: "lower", impact: "low", emoji: "🦵", cue: "À quatre pattes, pousse le talon vers le plafond." },
   fire_hydrant:       { name: "Fire hydrants",         voice: "Fire hydrants",    cat: "lower", impact: "low", emoji: "🐕", cue: "À quatre pattes, ouvre la hanche sur le côté." },
   chaise_mur:         { name: "Chaise contre le mur",  voice: "Wall sit",         cat: "lower", impact: "low", emoji: "🧱", cue: "Dos au mur, cuisses parallèles au sol, tiens." },
   releve_mollets:     { name: "Relevés de mollets",    voice: "Calf raises",      cat: "lower", impact: "low", emoji: "🦶", cue: "Monte sur la pointe des pieds, contrôle la descente." },
 
   // --- Haut du corps ---
-  pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé, coudes à 45°." },
-  pompes_genoux:      { name: "Pompes sur les genoux", voice: "Knee push-ups",    cat: "upper", impact: "low", emoji: "🙇", cue: "Appui sur les genoux, buste bien droit." },
+  pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé et aligné, coudes à 45°, regard vers le sol." },
+  pompes_genoux:      { name: "Pompes sur les genoux", voice: "Knee push-ups",    cat: "upper", impact: "low", emoji: "🙇", cue: "Appui sur les genoux, corps aligné épaules-hanches, coudes à 45°." },
   dips_chaise:        { name: "Dips sur chaise",       voice: "Chair dips",       cat: "upper", impact: "low", emoji: "🪑", cue: "Mains sur le siège, descends les coudes vers l'arrière." },
   pike_pushups:       { name: "Pompes piquées",        voice: "Pike push-ups",    cat: "upper", impact: "low", emoji: "🔺", cue: "Bassin haut, tête vers le sol, sollicite les épaules." },
   superman:           { name: "Superman",             voice: "Superman",         cat: "upper", impact: "low", emoji: "🦸", cue: "Sur le ventre, décolle bras et jambes." },
 
   // --- Gainage / core ---
-  planche:            { name: "Planche",               voice: "Plank",            cat: "core", impact: "low", emoji: "🧘", cue: "Corps aligné, nombril rentré, respire." },
+  planche:            { name: "Planche",               voice: "Plank",            cat: "core", impact: "low", emoji: "🧘", cue: "Corps aligné des talons à la tête, nombril rentré, ne creuse pas le dos." },
   planche_laterale:   { name: "Planche latérale",      voice: "Side plank",       cat: "core", impact: "low", emoji: "📐", cue: "Sur l'avant-bras, hanches hautes. Change de côté." },
   crunchs:            { name: "Crunchs",               voice: "Crunches",         cat: "core", impact: "low", emoji: "🎯", cue: "Décolle les omoplates, souffle en montant." },
   bicycle_crunch:     { name: "Bicycle crunch",        voice: "Bicycle crunches", cat: "core", impact: "low", emoji: "🚲", cue: "Coude vers le genou opposé, pédale lentement." },
   dead_bug:           { name: "Dead bug",              voice: "Dead bug",         cat: "core", impact: "low", emoji: "🐞", cue: "Sur le dos, bras et jambe opposés s'éloignent." },
-  releve_jambes:      { name: "Relevés de jambes",     voice: "Leg raises",       cat: "core", impact: "low", emoji: "🦵", cue: "Jambes tendues, descends sans creuser le dos." },
+  releve_jambes:      { name: "Relevés de jambes",     voice: "Leg raises",       cat: "core", impact: "low", emoji: "🦵", cue: "Jambes tendues, bas du dos plaqué au sol, descends lentement." },
   toe_touches:        { name: "Toe touches",           voice: "Toe touches",      cat: "core", impact: "low", emoji: "👆", cue: "Jambes en l'air, viens toucher les pointes." },
 
   // --- Retour au calme ---
