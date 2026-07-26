@@ -73,9 +73,24 @@ Pré-requis : un enregistrement DNS `move.yumea.fr` → IP du VPS.
 - Le VPS a un accès Internet ouvert → génération + téléchargement des rendus s'y font
   directement.
 
+## 🎙️ Coach & voix (état)
+
+- **Coach de marque** : personnage Soul entraîné « Yumea Coach A » (soul_id `add1b491…`),
+  réutilisable pour générer tous les exercices en gardant le même visage.
+- **Pipeline vidéo par exercice** : image de départ (soul) 2 angles → image→vidéo (Kling
+  1080p) → montage A-B-A (~30 s, switch ~10 s) via `explainer_video`.
+- **Voix (dissociée de la vidéo, une clé = une piste)** :
+  - EN : Higgsfield seed_audio (voix « Emily ») → `public/audio/en/*.wav`.
+  - FR : Cartesia (voix « Pauline », `sonic-3.5`) → `public/audio/fr/*.wav`.
+    Cartesia peut aussi **cloner/localiser** une voix (garder la même coach EN↔FR).
+  - Basculer la langue = changer `AUDIO_DIR` dans `coach.ts` + pack `phrases.ts`.
+
 ## 🛣️ Suite
 
-- [ ] Bibliothèque vidéo complète (1 clip par exercice) + posters.
-- [ ] Voix humaine anglaise par exercice.
+- [ ] Bibliothèque vidéo complète (1 clip 2 angles par exercice) avec la coach Soul + posters.
+- [ ] Voix par exercice (nom + conseil de forme) en pistes dissociées EN puis FR.
+- [ ] Conseils de forme enrichis par exercice (texte affiché + voix).
+- [ ] **Section Yoga** : parcours débutant → intermédiaire, postures détaillées, tenues,
+  conseils, temps de maintien (plus de détails que le format HIIT actuel).
 - [ ] Planning hebdo + rappels (notifications PWA).
 - [ ] Fusion dans `hub-tsuno` (retirer `output: export`, brancher Supabase, SSO employés).
