@@ -38,10 +38,10 @@ export const EXERCISES: Record<string, Exercise> = {
 
   // --- Bas du corps ---
   squats:             { name: "Squats",                voice: "Squats",           cat: "lower", impact: "low", emoji: "🪑", cue: "Poids sur les talons, genoux alignés avec la pointe des pieds, dos droit.", media: "/exercises/squats.mp4" },
-  squat_sumo:         { name: "Squat sumo",            voice: "Sumo squats",      cat: "lower", impact: "low", emoji: "🤸", cue: "Pieds larges, pointes vers l'extérieur, genoux dans l'axe des orteils, buste droit." },
-  fentes_statiques:   { name: "Fentes statiques",      voice: "Static lunges",    cat: "lower", impact: "low", emoji: "🦿", cue: "Descends droit, genou avant au-dessus de la cheville, dos droit." },
-  pont_fessier:       { name: "Pont fessier",          voice: "Glute bridge",     cat: "lower", impact: "low", emoji: "🌉", cue: "Pousse dans les talons, serre les fessiers en haut, sans cambrer le bas du dos." },
-  donkey_kicks:       { name: "Donkey kicks",          voice: "Donkey kicks",     cat: "lower", impact: "low", emoji: "🦵", cue: "À quatre pattes, pousse le talon vers le plafond." },
+  squat_sumo:         { name: "Squat sumo",            voice: "Sumo squats",      cat: "lower", impact: "low", emoji: "🤸", cue: "Pieds larges, pointes vers l'extérieur, genoux dans l'axe des orteils, buste droit.", media: "/exercises/squat_sumo.mp4" },
+  fentes_statiques:   { name: "Fentes statiques",      voice: "Static lunges",    cat: "lower", impact: "low", emoji: "🦿", cue: "Descends droit, genou avant au-dessus de la cheville, dos droit.", media: "/exercises/fentes_statiques.mp4" },
+  pont_fessier:       { name: "Pont fessier",          voice: "Glute bridge",     cat: "lower", impact: "low", emoji: "🌉", cue: "Pousse dans les talons, serre les fessiers en haut, sans cambrer le bas du dos.", media: "/exercises/pont_fessier.mp4" },
+  donkey_kicks:       { name: "Donkey kicks",          voice: "Donkey kicks",     cat: "lower", impact: "low", emoji: "🦵", cue: "À quatre pattes, pousse le talon vers le plafond.", media: "/exercises/donkey_kicks.mp4" },
   fire_hydrant:       { name: "Fire hydrants",         voice: "Fire hydrants",    cat: "lower", impact: "low", emoji: "🐕", cue: "À quatre pattes, ouvre la hanche sur le côté." },
   chaise_mur:         { name: "Chaise contre le mur",  voice: "Wall sit",         cat: "lower", impact: "low", emoji: "🧱", cue: "Dos au mur, cuisses parallèles au sol, tiens." },
   releve_mollets:     { name: "Relevés de mollets",    voice: "Calf raises",      cat: "lower", impact: "low", emoji: "🦶", cue: "Monte sur la pointe des pieds, contrôle la descente." },
