@@ -27,11 +27,16 @@ function beep(freq = 880, dur = 0.12, vol = 0.25) {
   } catch (e) { /* audio indisponible */ }
 }
 
-/* ---------- Voix française (SpeechSynthesis) ---------- */
-let frVoice = null;
+/* ---------- Coach voice (SpeechSynthesis, browser-native, gratuit) ----------
+ * Anglais pour l'instant. Aucune génération externe : c'est la synthèse du
+ * navigateur, donc zéro crédit. La langue est centralisée dans VOICE_LANG. */
+const VOICE_LANG = "en-US";
+let coachVoice = null;
 function loadVoice() {
   const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-  frVoice = voices.find(v => /fr[-_]FR/i.test(v.lang)) || voices.find(v => /^fr/i.test(v.lang)) || null;
+  const base = VOICE_LANG.slice(0, 2);
+  coachVoice = voices.find(v => v.lang && v.lang.toLowerCase() === VOICE_LANG.toLowerCase())
+    || voices.find(v => v.lang && v.lang.toLowerCase().startsWith(base)) || null;
 }
 if (window.speechSynthesis) {
   loadVoice();
@@ -42,8 +47,8 @@ function say(text, opts = {}) {
   try {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "fr-FR";
-    if (frVoice) u.voice = frVoice;
+    u.lang = VOICE_LANG;
+    if (coachVoice) u.voice = coachVoice;
     u.rate = opts.rate || 1.0;
     u.pitch = opts.pitch || 1.0;
     speechSynthesis.speak(u);
@@ -78,7 +83,7 @@ export class WorkoutPlayer {
     this.mode = "intro";
     let n = 3;
     const ex = EXERCISES[this.blocks[0].exId];
-    say(`Prépare-toi. Premier exercice : ${ex.name}.`);
+    say(`Get ready. First exercise: ${ex.name}.`);
     this.setCenter("Prêt ?", `Premier : ${ex.name}`, "3");
     const iv = setInterval(() => {
       if (this.paused) return;
@@ -107,11 +112,11 @@ export class WorkoutPlayer {
     const ex = EXERCISES[block.exId];
 
     if (mode === "work") {
-      say(`${ex.name}. C'est parti !`);
+      say(`${ex.name}. Let's go!`);
     } else {
       const next = this.blocks[i + 1];
       const nextEx = next ? EXERCISES[next.exId] : null;
-      say(nextEx ? `Repos. Prochain : ${nextEx.name}.` : "Repos.");
+      say(nextEx ? `Rest. Next up: ${nextEx.name}.` : "Rest.");
     }
 
     this.renderBlock();
@@ -168,7 +173,7 @@ export class WorkoutPlayer {
 
   finish() {
     clearInterval(this.tickHandle);
-    say("Bravo ! Séance terminée.");
+    say("Well done! Workout complete.");
     beep(880, 0.15); setTimeout(() => beep(1174, 0.3), 160);
     this.onFinish && this.onFinish();
   }

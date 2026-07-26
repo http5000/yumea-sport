@@ -159,7 +159,7 @@ function viewOnboarding() {
     </section>
 
     <section class="section">
-      <label class="toggle"><input type="checkbox" id="tglVoice" ${PlayerSettings.voice ? "checked" : ""}/> Voix française (coach)</label>
+      <label class="toggle"><input type="checkbox" id="tglVoice" ${PlayerSettings.voice ? "checked" : ""}/> Coach vocal (anglais)</label>
       <label class="toggle"><input type="checkbox" id="tglSound" ${PlayerSettings.sound ? "checked" : ""}/> Bips de décompte</label>
     </section>
 
