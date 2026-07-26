@@ -63,9 +63,17 @@ Pipeline de production des médias (via le serveur MCP Higgsfield) :
 1. **Vidéo d'exercice** — `generate_video` (Kling 3.0 Turbo, 9:16, 5 s) → boucle verticale.
 2. **Voix premium FR** — `generate_audio` (Seed Audio, voix française) → clips de coaching.
 3. Télécharger les rendus dans `assets/exercises/` et `assets/audio/`, puis renseigner
-   `media:` sur l'exercice concerné.
+   `media:` sur l'exercice concerné (le lecteur bascule alors emoji → vidéo tout seul).
 
-Un échantillon de chaque a été généré pour valider le pipeline (voir `assets/`).
+**Échantillons déjà générés (pipeline validé) :**
+
+- Vidéo squats 9:16 (Kling 3.0 Turbo) — job `8119a0cf-…`
+- Voix coach FR « Ines » (Seed Audio) — job `2c2c9cbb-…`
+
+> Note : dans cet environnement de dev, l'egress bloque le CDN Higgsfield (CloudFront),
+> donc les binaires ne sont pas versionnés ici. En prod / CI, l'étape de téléchargement
+> (`curl` des `rawUrl`) s'exécute là où le CDN est joignable, puis les fichiers vont
+> dans `assets/` et sont référencés via `media:`.
 
 ---
 
