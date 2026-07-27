@@ -13,5 +13,5 @@ mkdir -p "$DEST"
 rsync -a --delete out/ "$DEST/"
 chmod -R a+rX "$DEST"
 
-echo "✓ Déployé. URL de preview : https://yumeamove.49.13.153.199.nip.io"
-echo "  (bascule vers move.yumea.fr une fois le DNS créé)"
+echo "✓ Déployé. URL de production : https://move.yumea.fr"
+echo "  (alias preview : https://yumeamove.49.13.153.199.nip.io)"

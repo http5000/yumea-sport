@@ -42,5 +42,20 @@ export const COACH_EN: CoachPack = {
   },
 };
 
-/** Pack actif. Changer ici (ou selon la préférence utilisateur) pour traduire. */
+/** Jeu de répliques FRANÇAIS — voix Pauline (Cartesia), doublage pré-généré.
+ *  `arg` = nom de l'exercice prononcé. Tutoiement, énergique mais élégant. */
+export const COACH_FR: CoachPack = {
+  lang: "fr-FR",
+  lines: {
+    intro:    (ex = "") => `Prêts ? On commence par ${ex}.`,
+    go:       (ex = "") => `${ex}. C'est parti !`,
+    halfway:  () => "Milieu de série, tiens bon !",
+    tenLeft:  () => "Encore dix secondes, tiens bon !",
+    rest:     (nextEx = "") => `Repos. Ensuite, ${nextEx}.`,
+    restLast: () => "Repos.",
+    finish:   () => "Bravo, séance terminée. Rendez-vous demain !",
+  },
+};
+
+/** Pack actif. Bascule sur COACH_FR quand le doublage Pauline est en ligne. */
 export const COACH: CoachPack = COACH_EN;
