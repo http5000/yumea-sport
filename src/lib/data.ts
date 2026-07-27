@@ -47,7 +47,7 @@ export const EXERCISES: Record<string, Exercise> = {
   releve_mollets:     { name: "Relevés de mollets",    voice: "Calf raises",      cat: "lower", impact: "low", emoji: "🦶", cue: "Monte sur la pointe des pieds, contrôle la descente.", media: "/exercises/releve_mollets.mp4" },
 
   // --- Haut du corps ---
-  pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé et aligné, coudes à 45°, regard vers le sol." },
+  pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé et aligné, coudes à 45°, regard vers le sol.", media: "/exercises/pompes.mp4" },
   pompes_genoux:      { name: "Pompes sur les genoux", voice: "Knee push-ups",    cat: "upper", impact: "low", emoji: "🙇", cue: "Appui sur les genoux, corps aligné épaules-hanches, coudes à 45°." },
   dips_chaise:        { name: "Dips sur chaise",       voice: "Chair dips",       cat: "upper", impact: "low", emoji: "🪑", cue: "Mains sur le siège, descends les coudes vers l'arrière." },
   pike_pushups:       { name: "Pompes piquées",        voice: "Pike push-ups",    cat: "upper", impact: "low", emoji: "🔺", cue: "Bassin haut, tête vers le sol, sollicite les épaules." },
@@ -108,6 +108,12 @@ export interface Program {
 export interface ProfileDraft { goal: string; level: string; duration: number; seed?: number; }
 
 function pool(cat: Category, lowOnly: boolean): string[] {
+  // On ne programme QUE des exercices avec une vraie vidéo validée (jamais d'emoji).
+  const withMedia = Object.entries(EXERCISES)
+    .filter(([, e]) => e.cat === cat && !!e.media && (!lowOnly || e.impact === "low"))
+    .map(([id]) => id);
+  if (withMedia.length) return withMedia;
+  // Repli de sécurité : si une catégorie n'a pas encore de vidéo, on autorise le reste.
   return Object.entries(EXERCISES)
     .filter(([, e]) => e.cat === cat && (!lowOnly || e.impact === "low"))
     .map(([id]) => id);
