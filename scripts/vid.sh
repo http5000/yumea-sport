@@ -13,7 +13,7 @@ case "$mode" in
   clip)
     curl -s -o "$tmp.src.mp4" "$url"
     # re-encode qualite pro mais leger : 1080x1920, CRF 26, sans audio, faststart
-    ffmpeg -y -i "$tmp.src.mp4" -an -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -movflags +faststart "$DEST/$exid.mp4" 2>/dev/null
+    ffmpeg -y -i "$tmp.src.mp4" -an -c:v libx264 -preset veryfast -crf 25 -pix_fmt yuv420p -movflags +faststart "$DEST/$exid.mp4" 2>/dev/null
     # poster : 1re image (supprime le flash noir au demarrage)
     ffmpeg -y -i "$DEST/$exid.mp4" -frames:v 1 -q:v 3 "$DEST/$exid.jpg" 2>/dev/null
     rm -f "$tmp.src.mp4"
