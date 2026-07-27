@@ -7,6 +7,20 @@ import { COACH } from "@/lib/phrases";
 
 type Mode = "intro" | "work" | "rest" | "done";
 
+/** Poster (1re image) dérivé de l'URL vidéo : /exercises/x.mp4 -> /exercises/x.jpg */
+const poster = (media: string) => media.replace(/\.mp4$/, ".jpg");
+
+/** Repère graphique sobre (silhouette) — remplace les emojis. */
+function PoseMark({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="4.2" r="2.1" />
+      <path d="M12 6.6v7M12 8.5l-4.2 2M12 8.5l4.2 2M12 13.6l-3 6.4M12 13.6l3 6.4" />
+    </svg>
+  );
+}
+
 interface Engine {
   mode: Mode;
   index: number;
@@ -154,24 +168,39 @@ export default function WorkoutPlayer({
 
       <div className={`stage${isWork ? " stage-work" : ""}`}>
         {isIntro ? (
-          <div className="intro-emoji">🔥</div>
+          <PoseMark className="intro-mark" />
         ) : isWork && ex ? (
           <>
             <div className="phase-tag">{phaseTag}</div>
             <div className="ex-illus">
               {ex.media ? (
-                <video src={ex.media} autoPlay muted loop playsInline />
+                <video
+                  key={ex.media}
+                  src={ex.media}
+                  poster={poster(ex.media)}
+                  autoPlay muted loop playsInline preload="auto"
+                />
               ) : (
-                <span className="ex-emoji">{ex.emoji}</span>
+                <PoseMark className="ph" />
               )}
             </div>
             <h2 className="ex-name">{ex.name}</h2>
             <p className="ex-cue">{ex.cue}</p>
+            {/* Préchargement de la vidéo suivante : supprime le trou noir entre exercices */}
+            {nextEx?.media && (
+              <video className="prefetch-hidden" src={nextEx.media} preload="auto" muted playsInline aria-hidden="true" />
+            )}
           </>
         ) : (
           <>
             <div className="phase-tag rest-tag">Repos</div>
-            <div className="ex-illus rest-illus"><span className="ex-emoji">😮‍💨</span></div>
+            <div className="ex-illus rest-illus">
+              {nextEx?.media ? (
+                <video key={`rest-${nextEx.media}`} src={nextEx.media} poster={poster(nextEx.media)} autoPlay muted loop playsInline preload="auto" />
+              ) : (
+                <PoseMark className="ph" />
+              )}
+            </div>
             <h2 className="ex-name">Récupère</h2>
             <p className="ex-cue">{nextEx ? `Prochain : ${nextEx.name}` : "Bientôt fini !"}</p>
           </>
@@ -199,8 +228,8 @@ export default function WorkoutPlayer({
       </div>
       <div className="up-next">
         {isIntro
-          ? `Premier · ${(ex ?? EXERCISES[blocks[0].exId]).emoji} ${(ex ?? EXERCISES[blocks[0].exId]).name}`
-          : nextEx ? `À suivre · ${nextEx.emoji} ${nextEx.name}` : "Dernier effort 💪"}
+          ? `Premier · ${(ex ?? EXERCISES[blocks[0].exId]).name}`
+          : nextEx ? `À suivre · ${nextEx.name}` : "Dernier effort"}
       </div>
     </div>
   );

@@ -22,10 +22,10 @@ export interface Exercise {
 
 export const EXERCISES: Record<string, Exercise> = {
   // --- Échauffement / mobilité ---
-  marche_sur_place:   { name: "Marche sur place",      voice: "March in place",   cat: "warmup", impact: "low", emoji: "🚶", cue: "Monte les genoux, balance les bras." },
-  cercles_bras:       { name: "Cercles de bras",       voice: "Arm circles",      cat: "warmup", impact: "low", emoji: "🌀", cue: "Grands cercles lents, épaules relâchées." },
-  rotation_hanches:   { name: "Rotations des hanches", voice: "Hip circles",      cat: "warmup", impact: "low", emoji: "🔄", cue: "Mains sur les hanches, dessine de grands cercles." },
-  fentes_marchees:    { name: "Fentes marchées",       voice: "Walking lunges",   cat: "warmup", impact: "low", emoji: "🚶‍♀️", cue: "Grand pas, genou avant aligné avec la cheville, buste droit." },
+  marche_sur_place:   { name: "Marche sur place",      voice: "March in place",   cat: "warmup", impact: "low", emoji: "🚶", cue: "Monte les genoux, balance les bras.", media: "/exercises/marche_sur_place.mp4" },
+  cercles_bras:       { name: "Cercles de bras",       voice: "Arm circles",      cat: "warmup", impact: "low", emoji: "🌀", cue: "Grands cercles lents, épaules relâchées.", media: "/exercises/cercles_bras.mp4" },
+  rotation_hanches:   { name: "Rotations des hanches", voice: "Hip circles",      cat: "warmup", impact: "low", emoji: "🔄", cue: "Mains sur les hanches, dessine de grands cercles.", media: "/exercises/rotation_hanches.mp4" },
+  fentes_marchees:    { name: "Fentes marchées",       voice: "Walking lunges",   cat: "warmup", impact: "low", emoji: "🚶‍♀️", cue: "Grand pas, genou avant aligné avec la cheville, buste droit.", media: "/exercises/fentes_marchees.mp4" },
   chat_vache:         { name: "Chat / Vache",          voice: "Cat cow",          cat: "warmup", impact: "low", emoji: "🐱", cue: "À quatre pattes, arrondis puis creuse le dos." },
 
   // --- Cardio ---
