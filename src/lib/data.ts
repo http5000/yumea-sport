@@ -49,8 +49,8 @@ export const EXERCISES: Record<string, Exercise> = {
   // --- Haut du corps ---
   pompes:             { name: "Pompes",                voice: "Push-ups",         cat: "upper", impact: "low", emoji: "💪", cue: "Corps gainé et aligné, coudes à 45°, regard vers le sol.", media: "/exercises/pompes.mp4" },
   pompes_genoux:      { name: "Pompes sur les genoux", voice: "Knee push-ups",    cat: "upper", impact: "low", emoji: "🙇", cue: "Appui sur les genoux, corps aligné épaules-hanches, coudes à 45°." },
-  dips_chaise:        { name: "Dips sur chaise",       voice: "Chair dips",       cat: "upper", impact: "low", emoji: "🪑", cue: "Mains sur le siège, descends les coudes vers l'arrière." },
-  pike_pushups:       { name: "Pompes piquées",        voice: "Pike push-ups",    cat: "upper", impact: "low", emoji: "🔺", cue: "Bassin haut, tête vers le sol, sollicite les épaules." },
+  dips_chaise:        { name: "Dips sur chaise",       voice: "Chair dips",       cat: "upper", impact: "low", emoji: "🪑", cue: "Mains sur le siège, descends les coudes vers l'arrière.", media: "/exercises/dips_chaise.mp4" },
+  pike_pushups:       { name: "Pompes piquées",        voice: "Pike push-ups",    cat: "upper", impact: "low", emoji: "🔺", cue: "Bassin haut, tête vers le sol, sollicite les épaules.", media: "/exercises/pike_pushups.mp4" },
   superman:           { name: "Superman",             voice: "Superman",         cat: "upper", impact: "low", emoji: "🦸", cue: "Sur le ventre, décolle bras et jambes." },
 
   // --- Gainage / core ---
