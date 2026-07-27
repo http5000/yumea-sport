@@ -66,29 +66,43 @@ export function say(text: string, opts: { rate?: number; pitch?: number } = {}) 
   } catch { /* ignore */ }
 }
 
-/* --- Pistes audio pré-générées (Higgsfield, anglais), DISSOCIÉES de la vidéo ---
- * Une clé de phrase = un fichier public/audio/en/<clé>.wav. Si la clé est ici,
- * on lit le fichier (voix humaine) ; sinon repli sur la synthèse navigateur.
- * Pour le FR : ajouter public/audio/fr/<clé>.wav + basculer AUDIO_DIR. */
-const AUDIO_DIR = "/audio/en";
-export const AUDIO_CUES: Record<string, boolean> = {
-  halfway: true,
-  tenLeft: true,
-  finish: true,
-};
+/* --- Doublage humain pré-généré (voix Pauline FR), DISSOCIÉ de la vidéo ---
+ * Chaque réplique = un fichier public/audio/fr/<clé>.mp3. Les répliques qui
+ * annoncent un exercice sont paramétrées par son id : <clé>_<exId>.mp3
+ * (ex. go_squats.mp3, intro_squats.mp3, rest_pompes.mp3). Les autres sont
+ * fixes : halfway.mp3, tenLeft.mp3, restLast.mp3, finish.mp3.
+ *
+ * VOICE_MODE = "pauline" -> on lit le clip ; s'il manque, repli synthèse.
+ * VOICE_MODE = "browser" -> synthèse navigateur (état actuel, tant que le
+ * doublage n'est pas 100 % en ligne). On bascule les deux (ici + COACH dans
+ * phrases.ts) le jour de la mise en ligne des clips. */
+const AUDIO_DIR = "/audio/fr";
+export const VOICE_MODE: "browser" | "pauline" = "browser";
+
+/** Répliques dont le clip dépend de l'exercice annoncé. */
+const PER_EX_KEYS = new Set<string>(["go", "intro", "rest"]);
+
 let cueAudio: HTMLAudioElement | null = null;
-export function playCue(key: string, fallbackText: string) {
+
+/**
+ * Prononce une réplique du coach par sa CLÉ (jamais une chaîne en dur côté UI).
+ * @param key      clé de réplique (voir CoachKey)
+ * @param exId     id de l'exercice annoncé (pour go/intro/rest)
+ * @param fallback texte lu par la synthèse si le clip n'est pas disponible
+ */
+export function coachSpeak(key: string, exId: string | undefined, fallback: string) {
   if (!voiceOn) return;
-  if (typeof window !== "undefined" && AUDIO_CUES[key]) {
+  if (VOICE_MODE === "pauline" && typeof window !== "undefined") {
+    const file = PER_EX_KEYS.has(key) && exId ? `${key}_${exId}` : key;
     try {
       cueAudio?.pause();
       cancelVoice();
-      cueAudio = new Audio(`${AUDIO_DIR}/${key}.wav`);
-      cueAudio.play().catch(() => say(fallbackText));
+      cueAudio = new Audio(`${AUDIO_DIR}/${file}.mp3`);
+      cueAudio.play().catch(() => say(fallback));
       return;
-    } catch { /* repli */ }
+    } catch { /* repli synthèse */ }
   }
-  say(fallbackText);
+  say(fallback);
 }
 
 export function pauseVoice() { try { speechSynthesis?.pause(); } catch { /* */ } }

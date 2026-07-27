@@ -1,0 +1,45 @@
+# Doublage Pauline (Cartesia, voix 65b25c5d-ff07-4687-a04c-da2f43ef6fa9, fr)
+# Clips de base à générer (colonne 1 = nom de fichier base, colonne 2 = texte).
+# Le montage (scripts/pauline_build.sh) assemble ensuite go_/intro_/rest_ par exercice.
+name_marche_sur_place	Marche sur place
+name_cercles_bras	Cercles de bras
+name_rotation_hanches	Rotations des hanches
+name_fentes_marchees	Fentes marchées
+name_chat_vache	Chat vache
+name_montees_genoux	Montées de genoux
+name_talons_fesses	Talons fesses
+name_jumping_jacks	Jumping jacks
+name_pas_chasses	Pas chassés
+name_shadow_boxing	Shadow boxing
+name_mountain_climbers	Mountain climbers
+name_squats	Squats
+name_squat_sumo	Squat sumo
+name_fentes_statiques	Fentes statiques
+name_pont_fessier	Pont fessier
+name_donkey_kicks	Donkey kicks
+name_fire_hydrant	Fire hydrants
+name_chaise_mur	Chaise contre le mur
+name_releve_mollets	Relevés de mollets
+name_pompes	Pompes
+name_dips_chaise	Dips sur chaise
+name_pike_pushups	Pompes piquées
+name_superman	Superman
+name_planche	Planche
+name_planche_laterale	Planche latérale
+name_crunchs	Crunchs
+name_bicycle_crunch	Bicycle crunch
+name_dead_bug	Dead bug
+name_releve_jambes	Relevés de jambes
+name_toe_touches	Toe touches
+name_etirement_ischios	Étirement des ischios
+name_etirement_quadri	Étirement du quadriceps
+name_etirement_dos	Posture de l'enfant
+name_respiration	Respiration profonde
+name_etirement_cou	Étirement de la nuque
+carrier_go	C'est parti !
+carrier_intro	Prêts ? Premier exercice :
+carrier_rest	Repos. Ensuite :
+halfway	Milieu de série, tiens bon !
+tenLeft	Encore dix secondes, tiens bon !
+restLast	Repos.
+finish	Bravo, séance terminée. Rendez-vous demain !

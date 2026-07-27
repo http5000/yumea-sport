@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useRef } from "react";
 import { EXERCISES, type Program } from "@/lib/data";
-import { beep, say, playCue, initVoice, pauseVoice, resumeVoice, cancelVoice } from "@/lib/coach";
+import { beep, coachSpeak, initVoice, pauseVoice, resumeVoice, cancelVoice } from "@/lib/coach";
 import { COACH } from "@/lib/phrases";
 
 type Mode = "intro" | "work" | "rest" | "done";
@@ -54,18 +54,19 @@ export default function WorkoutPlayer({
 
     const ex = EXERCISES[block.exId];
     if (mode === "work") {
-      say(COACH.lines.go(ex.voice ?? ex.name));
+      coachSpeak("go", block.exId, COACH.lines.go(ex.voice ?? ex.name));
     } else {
       const next = blocks[i + 1];
       const nextEx = next ? EXERCISES[next.exId] : null;
-      say(nextEx ? COACH.lines.rest(nextEx.voice ?? nextEx.name) : COACH.lines.restLast());
+      if (next && nextEx) coachSpeak("rest", next.exId, COACH.lines.rest(nextEx.voice ?? nextEx.name));
+      else coachSpeak("restLast", undefined, COACH.lines.restLast());
     }
     force();
   });
 
   const finish = useRef<() => void>(() => {
     eng.current.mode = "done";
-    playCue("finish", COACH.lines.finish());
+    coachSpeak("finish", undefined, COACH.lines.finish());
     beep(880, 0.15);
     window.setTimeout(() => beep(1174, 0.3), 160);
     force();
@@ -76,7 +77,7 @@ export default function WorkoutPlayer({
   useEffect(() => {
     initVoice();
     const first = EXERCISES[blocks[0].exId];
-    say(COACH.lines.intro(first.voice ?? first.name));
+    coachSpeak("intro", blocks[0].exId, COACH.lines.intro(first.voice ?? first.name));
 
     const iv = window.setInterval(() => {
       const e = eng.current;
@@ -99,8 +100,8 @@ export default function WorkoutPlayer({
         // Repères vocaux (clés traduisibles) : mi-parcours puis 10 s restantes.
         const w = blocks[e.index].work;
         if (blocks[e.index].phase !== "cooldown") {
-          if (w >= 18 && e.remaining === Math.round(w / 2)) playCue("halfway", COACH.lines.halfway());
-          else if (w >= 22 && e.remaining === 10) playCue("tenLeft", COACH.lines.tenLeft());
+          if (w >= 18 && e.remaining === Math.round(w / 2)) coachSpeak("halfway", undefined, COACH.lines.halfway());
+          else if (w >= 22 && e.remaining === 10) coachSpeak("tenLeft", undefined, COACH.lines.tenLeft());
         }
       }
       if (e.remaining <= 3 && e.remaining > 0) beep(e.mode === "work" ? 700 : 520);
