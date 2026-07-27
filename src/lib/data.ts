@@ -29,11 +29,11 @@ export const EXERCISES: Record<string, Exercise> = {
   chat_vache:         { name: "Chat / Vache",          voice: "Cat cow",          cat: "warmup", impact: "low", emoji: "🐱", cue: "À quatre pattes, arrondis puis creuse le dos." },
 
   // --- Cardio ---
-  montees_genoux:     { name: "Montées de genoux",     voice: "High knees",       cat: "cardio", impact: "low",  emoji: "🏃", cue: "Genoux à hauteur de hanches, gainage actif." },
-  talons_fesses:      { name: "Talons-fesses",         voice: "Butt kicks",       cat: "cardio", impact: "low",  emoji: "🦵", cue: "Ramène les talons vers les fessiers, rythme régulier." },
-  jumping_jacks:      { name: "Jumping jacks",         voice: "Jumping jacks",    cat: "cardio", impact: "high", emoji: "⭐", cue: "Bras et jambes s'ouvrent en même temps." },
-  pas_chasses:        { name: "Pas chassés",           voice: "Side steps",       cat: "cardio", impact: "low",  emoji: "↔️", cue: "Reste bas, déplace-toi latéralement." },
-  shadow_boxing:      { name: "Shadow boxing",         voice: "Shadow boxing",    cat: "cardio", impact: "low",  emoji: "🥊", cue: "Directs et crochets, gaine le ventre." },
+  montees_genoux:     { name: "Montées de genoux",     voice: "High knees",       cat: "cardio", impact: "low",  emoji: "🏃", cue: "Genoux à hauteur de hanches, gainage actif.", media: "/exercises/montees_genoux.mp4" },
+  talons_fesses:      { name: "Talons-fesses",         voice: "Butt kicks",       cat: "cardio", impact: "low",  emoji: "🦵", cue: "Ramène les talons vers les fessiers, rythme régulier.", media: "/exercises/talons_fesses.mp4" },
+  jumping_jacks:      { name: "Jumping jacks",         voice: "Jumping jacks",    cat: "cardio", impact: "high", emoji: "⭐", cue: "Bras et jambes s'ouvrent en même temps.", media: "/exercises/jumping_jacks.mp4" },
+  pas_chasses:        { name: "Pas chassés",           voice: "Side steps",       cat: "cardio", impact: "low",  emoji: "↔️", cue: "Reste bas, déplace-toi latéralement.", media: "/exercises/pas_chasses.mp4" },
+  shadow_boxing:      { name: "Shadow boxing",         voice: "Shadow boxing",    cat: "cardio", impact: "low",  emoji: "🥊", cue: "Directs et crochets, gaine le ventre.", media: "/exercises/shadow_boxing.mp4" },
   mountain_climbers:  { name: "Mountain climbers",     voice: "Mountain climbers",cat: "cardio", impact: "low",  emoji: "⛰️", cue: "En planche gainée, hanches basses, ramène les genoux sans monter les fessiers." },
 
   // --- Bas du corps ---
@@ -59,15 +59,15 @@ export const EXERCISES: Record<string, Exercise> = {
   crunchs:            { name: "Crunchs",               voice: "Crunches",         cat: "core", impact: "low", emoji: "🎯", cue: "Décolle les omoplates, souffle en montant." },
   bicycle_crunch:     { name: "Bicycle crunch",        voice: "Bicycle crunches", cat: "core", impact: "low", emoji: "🚲", cue: "Coude vers le genou opposé, pédale lentement." },
   dead_bug:           { name: "Dead bug",              voice: "Dead bug",         cat: "core", impact: "low", emoji: "🐞", cue: "Sur le dos, bras et jambe opposés s'éloignent." },
-  releve_jambes:      { name: "Relevés de jambes",     voice: "Leg raises",       cat: "core", impact: "low", emoji: "🦵", cue: "Jambes tendues, bas du dos plaqué au sol, descends lentement." },
-  toe_touches:        { name: "Toe touches",           voice: "Toe touches",      cat: "core", impact: "low", emoji: "👆", cue: "Jambes en l'air, viens toucher les pointes." },
+  releve_jambes:      { name: "Relevés de jambes",     voice: "Leg raises",       cat: "core", impact: "low", emoji: "🦵", cue: "Jambes tendues, bas du dos plaqué au sol, descends lentement.", media: "/exercises/releve_jambes.mp4" },
+  toe_touches:        { name: "Toe touches",           voice: "Toe touches",      cat: "core", impact: "low", emoji: "👆", cue: "Jambes en l'air, viens toucher les pointes.", media: "/exercises/toe_touches.mp4" },
 
   // --- Retour au calme ---
   etirement_ischios:  { name: "Étirement ischios",     voice: "Hamstring stretch",cat: "cooldown", impact: "low", emoji: "🧎", cue: "Jambe tendue, penche-toi doucement vers l'avant." },
-  etirement_quadri:   { name: "Étirement quadriceps",  voice: "Quad stretch",     cat: "cooldown", impact: "low", emoji: "🦩", cue: "Attrape la cheville, genoux serrés." },
+  etirement_quadri:   { name: "Étirement quadriceps",  voice: "Quad stretch",     cat: "cooldown", impact: "low", emoji: "🦩", cue: "Attrape la cheville, genoux serrés.", media: "/exercises/etirement_quadri.mp4" },
   etirement_dos:      { name: "Posture de l'enfant",   voice: "Child's pose",     cat: "cooldown", impact: "low", emoji: "🧘‍♀️", cue: "Fessiers vers les talons, bras tendus devant." },
-  respiration:        { name: "Respiration profonde",  voice: "Deep breathing",   cat: "cooldown", impact: "low", emoji: "🌬️", cue: "Inspire 4 s, expire 6 s. Relâche tout." },
-  etirement_cou:      { name: "Étirement de la nuque", voice: "Neck stretch",     cat: "cooldown", impact: "low", emoji: "🙆", cue: "Incline la tête sur le côté, épaules basses." },
+  respiration:        { name: "Respiration profonde",  voice: "Deep breathing",   cat: "cooldown", impact: "low", emoji: "🌬️", cue: "Inspire 4 s, expire 6 s. Relâche tout.", media: "/exercises/respiration.mp4" },
+  etirement_cou:      { name: "Étirement de la nuque", voice: "Neck stretch",     cat: "cooldown", impact: "low", emoji: "🙆", cue: "Incline la tête sur le côté, épaules basses.", media: "/exercises/etirement_cou.mp4" },
 };
 
 export interface Goal { label: string; icon: string; desc: string; focus: Category[]; }
