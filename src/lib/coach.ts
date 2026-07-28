@@ -77,7 +77,7 @@ export function say(text: string, opts: { rate?: number; pitch?: number } = {}) 
  * doublage n'est pas 100 % en ligne). On bascule les deux (ici + COACH dans
  * phrases.ts) le jour de la mise en ligne des clips. */
 const AUDIO_DIR = "/audio/fr";
-export const VOICE_MODE: "browser" | "pauline" = "browser";
+export const VOICE_MODE: "browser" | "pauline" = "pauline";
 
 /** Répliques dont le clip dépend de l'exercice annoncé. */
 const PER_EX_KEYS = new Set<string>(["go", "intro", "rest"]);

@@ -57,5 +57,5 @@ export const COACH_FR: CoachPack = {
   },
 };
 
-/** Pack actif. Bascule sur COACH_FR quand le doublage Pauline est en ligne. */
-export const COACH: CoachPack = COACH_EN;
+/** Pack actif : FR (voix Pauline, doublage en ligne). */
+export const COACH: CoachPack = COACH_FR;
