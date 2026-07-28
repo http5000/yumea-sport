@@ -1,6 +1,16 @@
-/* Persistance locale (localStorage). Aucune base de données, aucun compte.
- * Le jour de la fusion Tsuno, on remplacera ces fonctions par des appels
- * Supabase (même signature) sans toucher à l'UI. */
+/* =========================================================================
+ * Yumea Move — Couche de persistance UNIQUE.
+ *
+ * ⚠️ SEULE porte d'accès aux données. L'UI ne touche JAMAIS localStorage ni
+ *    le réseau directement : elle passe toujours par `store`, `computeStreak`,
+ *    `lastSevenDays`. Le jour de la fusion Tsuno, on remplace UNIQUEMENT
+ *    l'intérieur de ce fichier (localStorage → appels Tsuno/Supabase, mêmes
+ *    signatures) — aucun composant à modifier.
+ *
+ * Pas d'authentification : l'app marche sans compte. Les réglages et clés
+ * viennent de config.ts (centralisés, façon coach.ts).
+ * ========================================================================= */
+import { STORAGE_KEYS, DEFAULT_SETTINGS } from "@/lib/config";
 
 export interface Session { date: string; goal: string; title: string; minutes: number; }
 export interface Settings { voice: boolean; sound: boolean; }
@@ -19,15 +29,15 @@ function write(key: string, value: unknown) {
 }
 
 export const store = {
-  getProfile(): ProfileDraft | null { return read<ProfileDraft | null>("ym_profile", null); },
-  setProfile(p: ProfileDraft) { write("ym_profile", p); },
+  getProfile(): ProfileDraft | null { return read<ProfileDraft | null>(STORAGE_KEYS.profile, null); },
+  setProfile(p: ProfileDraft) { write(STORAGE_KEYS.profile, p); },
 
-  getHistory(): Session[] { return read<Session[]>("ym_history", []); },
-  addSession(s: Session) { const h = this.getHistory(); h.push(s); write("ym_history", h); },
-  setHistory(h: Session[]) { write("ym_history", h); },
+  getHistory(): Session[] { return read<Session[]>(STORAGE_KEYS.history, []); },
+  addSession(s: Session) { const h = this.getHistory(); h.push(s); write(STORAGE_KEYS.history, h); },
+  setHistory(h: Session[]) { write(STORAGE_KEYS.history, h); },
 
-  getSettings(): Settings { return read<Settings>("ym_settings", { voice: true, sound: true }); },
-  setSettings(s: Settings) { write("ym_settings", s); },
+  getSettings(): Settings { return read<Settings>(STORAGE_KEYS.settings, DEFAULT_SETTINGS); },
+  setSettings(s: Settings) { write(STORAGE_KEYS.settings, s); },
 };
 
 function isoDay(d: Date) { return d.toISOString().slice(0, 10); }
