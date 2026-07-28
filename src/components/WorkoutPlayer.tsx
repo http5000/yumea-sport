@@ -156,81 +156,54 @@ export default function WorkoutPlayer({
     : `Tour ${block.round}/${block.rounds}`
     : "";
 
+  // Vidéo affichée : exercice en cours (work), le prochain (intro/repos).
+  const shownEx = isIntro ? EXERCISES[blocks[0].exId] : isWork ? ex : nextEx;
+  const media = shownEx?.media;
+
   return (
-    <div className={`player${isRest ? " resting" : ""}`}>
-      <div className="player-top">
-        <button className="icon-btn" aria-label="Quitter" onClick={quit}>✕</button>
-        <div className="player-title">{program.meta.goalIcon} {program.title}</div>
-        <div style={{ width: 40 }} />
-      </div>
-      <div className="progress-track">
-        <div className="progress-fill" style={{ width: `${(100 * e.doneWork) / totalWork}%` }} />
-      </div>
+    <div className={`player-fs${isRest ? " resting" : ""}${e.paused ? " paused" : ""}`}>
+      {media ? (
+        <video key={media} className="player-video" src={media} poster={poster(media)}
+          autoPlay muted loop playsInline preload="auto" />
+      ) : (
+        <div className="player-video player-video-ph"><PoseMark className="fs-mark" /></div>
+      )}
+      <div className="fs-scrim fs-scrim-top" />
+      <div className="fs-scrim fs-scrim-bottom" />
 
-      <div className={`stage${isWork ? " stage-work" : ""}`}>
-        {isIntro ? (
-          <PoseMark className="intro-mark" />
-        ) : isWork && ex ? (
-          <>
-            <div className="phase-tag">{phaseTag}</div>
-            <div className="ex-illus">
-              {ex.media ? (
-                <video
-                  key={ex.media}
-                  src={ex.media}
-                  poster={poster(ex.media)}
-                  autoPlay muted loop playsInline preload="auto"
-                />
-              ) : (
-                <PoseMark className="ph" />
-              )}
-            </div>
-            <h2 className="ex-name">{ex.name}</h2>
-            <p className="ex-cue">{ex.cue}</p>
-            {/* Préchargement de la vidéo suivante : supprime le trou noir entre exercices */}
-            {nextEx?.media && (
-              <video className="prefetch-hidden" src={nextEx.media} preload="auto" muted playsInline aria-hidden="true" />
-            )}
-          </>
-        ) : (
-          <>
-            <div className="phase-tag rest-tag">Repos</div>
-            <div className="ex-illus rest-illus">
-              {nextEx?.media ? (
-                <video key={`rest-${nextEx.media}`} src={nextEx.media} poster={poster(nextEx.media)} autoPlay muted loop playsInline preload="auto" />
-              ) : (
-                <PoseMark className="ph" />
-              )}
-            </div>
-            <h2 className="ex-name">Récupère</h2>
-            <p className="ex-cue">{nextEx ? `Prochain : ${nextEx.name}` : "Bientôt fini !"}</p>
-          </>
-        )}
-      </div>
+      {/* Préchargement de la vidéo suivante (supprime le trou noir entre exercices) */}
+      {isWork && nextEx?.media && (
+        <video className="prefetch-hidden" src={nextEx.media} preload="auto" muted playsInline aria-hidden="true" />
+      )}
 
-      <div className="ring-wrap">
-        <svg className="ring" viewBox="0 0 120 120">
-          <circle className="ring-bg" cx="60" cy="60" r="54" />
-          <circle
-            className="ring-fg" cx="60" cy="60" r="54"
-            style={{ strokeDasharray: RING, strokeDashoffset: RING * (1 - frac) }}
-          />
-        </svg>
-        <div className="ring-center">
-          <div className="ring-time">{e.remaining}</div>
-          <div className="ring-label">{isIntro ? "Prêt ?" : isWork ? "GO" : "repos"}</div>
+      {/* Haut : arrêter · phase · passer */}
+      <div className="fs-top">
+        <button className="fs-quit" aria-label="Arrêter" onClick={quit}>✕</button>
+        <div className="fs-phase">{isIntro ? "Prêt ?" : isRest ? "Repos" : phaseTag}</div>
+        {isIntro ? <div style={{ width: 76 }} /> : <button className="fs-skip" onClick={skip}>Passer ›</button>}
+      </div>
+      <div className="fs-progress"><span style={{ width: `${(100 * e.doneWork) / totalWork}%` }} /></div>
+
+      {/* Bas : nom · consigne · timer / pause */}
+      <div className="fs-bottom">
+        <h2 className="fs-name">
+          {isRest ? (nextEx ? `Ensuite · ${nextEx.name}` : "Dernier effort") : (shownEx?.name ?? "")}
+        </h2>
+        {!isRest && shownEx?.cue && <p className="fs-cue">{shownEx.cue}</p>}
+
+        <div className="fs-dock">
+          <div className="fs-timer">
+            <svg className="fs-ring" viewBox="0 0 120 120">
+              <circle className="fs-ring-bg" cx="60" cy="60" r="54" />
+              <circle className="fs-ring-fg" cx="60" cy="60" r="54"
+                style={{ strokeDasharray: RING, strokeDashoffset: RING * (1 - frac) }} />
+            </svg>
+            <div className="fs-num">{e.remaining}</div>
+          </div>
+          <button className="fs-pause" onClick={togglePause} aria-label={e.paused ? "Reprendre" : "Pause"}>
+            {e.paused ? "▶︎" : "❚❚"}
+          </button>
         </div>
-      </div>
-
-      <div className="player-controls">
-        <button className="ctrl" aria-label="Précédent" onClick={prev}>⏮</button>
-        <button className="ctrl ctrl-main" onClick={togglePause}>{e.paused ? "▶︎ Reprendre" : "⏸ Pause"}</button>
-        <button className="ctrl" aria-label="Suivant" onClick={skip}>⏭</button>
-      </div>
-      <div className="up-next">
-        {isIntro
-          ? `Premier · ${(ex ?? EXERCISES[blocks[0].exId]).name}`
-          : nextEx ? `À suivre · ${nextEx.name}` : "Dernier effort"}
       </div>
     </div>
   );
