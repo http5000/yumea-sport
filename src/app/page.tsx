@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   GOALS, LEVELS, DURATIONS, EXERCISES, generateProgram,
   type Program, type ProfileDraft,
 } from "@/lib/data";
 import { store, computeStreak, lastSevenDays, type Session, type Settings } from "@/lib/store";
 import { setAudioPrefs } from "@/lib/coach";
+import * as auth from "@/lib/auth";
+import type { AuthUser } from "@/lib/auth";
 import WorkoutPlayer from "@/components/WorkoutPlayer";
 
-type Screen = "home" | "onboarding" | "preview" | "play" | "done" | "progress";
+type Screen = "home" | "onboarding" | "preview" | "play" | "done" | "progress" | "account";
 
 const QUICK: { goal: string; level: string; duration: number; tag: string; icon: string }[] = [
   { goal: "cardio",   level: "debutant",      duration: 5,  tag: "Réveil express",     icon: "⚡" },
@@ -24,6 +26,7 @@ export default function Page() {
   const [program, setProgram] = useState<Program | null>(null);
   const [history, setHistory] = useState<Session[]>([]);
   const [settings, setSettings] = useState<Settings>({ voice: true, sound: true });
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [ready, setReady] = useState(false);
 
   // Hydratation depuis localStorage (client uniquement)
@@ -38,7 +41,24 @@ export default function Page() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
     }
+    // Session cloud : si un token existe, on rafraîchit le compte + l'historique.
+    setAuthUser(auth.getStoredUser());
+    if (auth.isLoggedIn()) {
+      auth.me()
+        .then((d) => { setAuthUser(d.user); store.setHistory(d.history); setHistory(d.history); })
+        .catch(() => { auth.logout(); setAuthUser(null); });
+    }
   }, []);
+
+  /** Connexion / inscription puis fusion des séances locales ↔ serveur. */
+  async function doAuth(mode: "login" | "register", email: string, password: string) {
+    const user = mode === "register" ? await auth.register(email, password) : await auth.login(email, password);
+    setAuthUser(user);
+    const { history: merged } = await auth.syncSessions(store.getHistory());
+    store.setHistory(merged); setHistory(merged);
+    setScreen("home");
+  }
+  function doLogout() { auth.logout(); setAuthUser(null); setScreen("home"); }
 
   const streak = useMemo(() => computeStreak(history), [history]);
   const totalMin = useMemo(() => history.reduce((a, h) => a + (h.minutes || 0), 0), [history]);
@@ -57,6 +77,7 @@ export default function Page() {
     const s: Session = { date: new Date().toISOString(), goal: program.goal, title: program.title, minutes: program.meta.estMin };
     store.addSession(s);
     setHistory(store.getHistory());
+    if (auth.isLoggedIn()) auth.pushSession(s).catch(() => {});
     setScreen("done");
   }
 
@@ -99,6 +120,11 @@ export default function Page() {
         <Progress history={history} streak={streak} totalMin={totalMin}
           onBack={() => setScreen("home")} onNav={setScreen} />
       )}
+
+      {screen === "account" && (
+        <Account user={authUser} streak={streak} count={history.length} totalMin={totalMin}
+          onAuth={doAuth} onLogout={doLogout} onBack={() => setScreen("home")} onNav={setScreen} />
+      )}
     </div>
   );
 }
@@ -115,7 +141,78 @@ function Nav({ active, onNav }: { active: Screen; onNav: (s: Screen) => void }) 
       <Item id="home" icon="🏠" label="Accueil" />
       <Item id="onboarding" icon="✨" label="Générer" />
       <Item id="progress" icon="📈" label="Progrès" />
+      <Item id="account" icon="👤" label="Compte" />
     </nav>
+  );
+}
+
+/* ------------------------------ Compte ------------------------------ */
+function Account({ user, streak, count, totalMin, onAuth, onLogout, onBack, onNav }: {
+  user: AuthUser | null; streak: number; count: number; totalMin: number;
+  onAuth: (mode: "login" | "register", email: string, password: string) => Promise<void>;
+  onLogout: () => void; onBack: () => void; onNav: (s: Screen) => void;
+}) {
+  const [mode, setMode] = useState<"login" | "register">("register");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    setErr(""); setBusy(true);
+    try { await onAuth(mode, email.trim(), password); }
+    catch (ex) { setErr(auth.authError(ex instanceof Error ? ex.message : "")); }
+    finally { setBusy(false); }
+  }
+
+  if (user) {
+    return (
+      <>
+        <header className="page-head"><button className="back" onClick={onBack}>‹ Retour</button><h2>Mon compte</h2></header>
+        <section className="section">
+          <div className="account-card">
+            <div className="account-avatar">{user.email.slice(0, 1).toUpperCase()}</div>
+            <div><b>{user.email}</b><small>Synchronisé sur le cloud Yumea</small></div>
+          </div>
+        </section>
+        <section className="section">
+          <div className="streak-row">
+            <div className="stat-chip stat-chip-dark"><b>{streak}</b><span>série</span></div>
+            <div className="stat-chip stat-chip-dark"><b>{count}</b><span>séances</span></div>
+            <div className="stat-chip stat-chip-dark"><b>{totalMin}</b><span>min</span></div>
+          </div>
+        </section>
+        <section className="section">
+          <p className="account-note">Tes séances sont sauvegardées sur ton compte : tu les retrouves sur tous tes appareils, et elles remonteront dans Tsuno quand tu relieras ton compte.</p>
+          <button className="cta ghost" onClick={onLogout}>Se déconnecter</button>
+        </section>
+        <Nav active="account" onNav={onNav} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <header className="page-head"><button className="back" onClick={onBack}>‹ Retour</button><h2>{mode === "register" ? "Créer mon compte" : "Se connecter"}</h2></header>
+      <section className="section">
+        <p className="account-note">Crée un compte pour sauvegarder ta progression et la retrouver partout. Le même email te reliera automatiquement à Tsuno plus tard.</p>
+        <form onSubmit={submit} className="auth-form">
+          <input className="field" type="email" inputMode="email" autoComplete="email" placeholder="Ton email"
+            value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input className="field" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"}
+            placeholder="Mot de passe (6 caractères min.)" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          {err && <p className="auth-err">{err}</p>}
+          <button className="cta" type="submit" disabled={busy}>
+            {busy ? "…" : mode === "register" ? "Créer mon compte" : "Se connecter"}
+          </button>
+        </form>
+        <button className="auth-switch" onClick={() => { setErr(""); setMode(mode === "register" ? "login" : "register"); }}>
+          {mode === "register" ? "J'ai déjà un compte — me connecter" : "Pas encore de compte — en créer un"}
+        </button>
+      </section>
+      <Nav active="account" onNav={onNav} />
+    </>
   );
 }
 
@@ -195,7 +292,7 @@ function Onboarding({ draft, settings, onChange, onSetting, onBack, onNav, onGen
         </div>
       </section>
       <section className="section">
-        <label className="toggle"><input type="checkbox" checked={settings.voice} onChange={(e) => onSetting("voice", e.target.checked)} /> Coach vocal (anglais)</label>
+        <label className="toggle"><input type="checkbox" checked={settings.voice} onChange={(e) => onSetting("voice", e.target.checked)} /> Coach vocal (Pauline, français)</label>
         <label className="toggle"><input type="checkbox" checked={settings.sound} onChange={(e) => onSetting("sound", e.target.checked)} /> Bips de décompte</label>
       </section>
       <section className="section">

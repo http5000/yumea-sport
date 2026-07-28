@@ -24,6 +24,7 @@ export const store = {
 
   getHistory(): Session[] { return read<Session[]>("ym_history", []); },
   addSession(s: Session) { const h = this.getHistory(); h.push(s); write("ym_history", h); },
+  setHistory(h: Session[]) { write("ym_history", h); },
 
   getSettings(): Settings { return read<Settings>("ym_settings", { voice: true, sound: true }); },
   setSettings(s: Settings) { write("ym_settings", s); },
